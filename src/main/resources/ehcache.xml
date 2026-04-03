@@ -1,0 +1,95 @@
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <!--
+        EhCache 3 config for Hibernate L2 cache regions.
+        This file is referenced by HibernateMultiTenancyConfig via hibernate.javax.cache.uri.
+
+        Strategy:
+        - Entity caches (customers, products, tenants): READ_WRITE, medium heap + disk overflow
+        - Collection caches (customer orders, order items): smaller, shorter TTL since they change more
+        - Query caches: short TTL, no disk overflow (query results are often invalidated anyway)
+    -->
+
+    <!-- customers entity cache - 5000 entries in heap, 24 hour TTL -->
+    <cache alias="com.crm.multitenant.domain.Customer">
+        <expiry>
+            <ttl unit="hours">24</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">5000</heap>
+            <offheap unit="MB">50</offheap>
+        </resources>
+    </cache>
+
+    <!-- customer orders collection cache -->
+    <cache alias="com.crm.multitenant.domain.Customer.orders">
+        <expiry>
+            <ttl unit="hours">6</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">2000</heap>
+        </resources>
+    </cache>
+
+    <!-- products don't change often - long TTL, bigger heap -->
+    <cache alias="com.crm.multitenant.domain.Product">
+        <expiry>
+            <ttl unit="hours">48</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">2000</heap>
+            <offheap unit="MB">20</offheap>
+        </resources>
+    </cache>
+
+    <!-- orders - shorter TTL since status changes frequently -->
+    <cache alias="com.crm.multitenant.domain.Order">
+        <expiry>
+            <ttl unit="hours">2</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">10000</heap>
+        </resources>
+    </cache>
+
+    <cache alias="com.crm.multitenant.domain.Order.orderItems">
+        <expiry>
+            <ttl unit="hours">2</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">30000</heap>
+        </resources>
+    </cache>
+
+    <!-- tenants table is tiny and barely ever changes -->
+    <cache alias="com.crm.multitenant.domain.Tenant">
+        <expiry>
+            <ttl unit="hours">72</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">200</heap>
+        </resources>
+    </cache>
+
+    <!-- Hibernate query cache - keep TTL short, queries are hard to invalidate precisely -->
+    <cache alias="org.hibernate.cache.internal.StandardQueryCache">
+        <expiry>
+            <ttl unit="minutes">10</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">500</heap>
+        </resources>
+    </cache>
+
+    <cache alias="default-update-timestamps-region">
+        <expiry>
+            <none/>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+        </resources>
+    </cache>
+
+</config>
