@@ -1,0 +1,24 @@
+# Testcontainers spins up its own Postgres so most Spring datasource config is
+# overridden by @ServiceConnection. These settings keep the test context lean.
+spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    default-schema: public
+    schemas: public
+  jpa:
+    show-sql: false  # keep test output readable
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=1m
+
+# no seed data in tests - we set up exactly what each test needs
+app:
+  seed-on-startup: false
+
+logging:
+  level:
+    com.crm: INFO
+    org.hibernate.SQL: WARN
