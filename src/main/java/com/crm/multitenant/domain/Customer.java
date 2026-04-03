@@ -31,9 +31,8 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor
 @SQLRestriction("is_deleted = false")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "base_seq", sequenceName = "customer_seq", allocationSize = 50)
 public class Customer extends BaseEntity {
-
-    @SequenceGenerator(name = "base_seq", sequenceName = "customer_seq", allocationSize = 50)
 
     @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;

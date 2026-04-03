@@ -45,9 +45,8 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor
 @SQLRestriction("is_deleted = false")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "base_seq", sequenceName = "order_seq", allocationSize = 50)
 public class Order extends BaseEntity {
-
-    @SequenceGenerator(name = "base_seq", sequenceName = "order_seq", allocationSize = 50)
 
     // not nullable - every order must belong to a customer
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

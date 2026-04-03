@@ -45,6 +45,7 @@ public class CustomerService {
     @Cacheable(value = "customers", key = "#id")
     public CustomerResponse findById(Long id) {
         return customerRepository.findById(id)
+                .filter(c -> !c.isDeleted())
                 .map(customerMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }

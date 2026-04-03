@@ -17,9 +17,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "order_items")
 @Getter @Setter @NoArgsConstructor
+@SequenceGenerator(name = "base_seq", sequenceName = "order_item_seq", allocationSize = 50)
 public class OrderItem extends BaseEntity {
-
-    @SequenceGenerator(name = "base_seq", sequenceName = "order_item_seq", allocationSize = 50)
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)

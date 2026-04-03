@@ -34,6 +34,7 @@ public class ProductService {
     @Cacheable(value = "products", key = "#id")
     public ProductResponse findById(Long id) {
         return productRepository.findById(id)
+                .filter(p -> !p.isDeleted())
                 .map(productMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
     }

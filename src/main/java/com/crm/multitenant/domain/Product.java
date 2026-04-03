@@ -24,9 +24,8 @@ import java.math.BigDecimal;
 @Getter @Setter @NoArgsConstructor
 @SQLRestriction("is_deleted = false")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "base_seq", sequenceName = "product_seq", allocationSize = 50)
 public class Product extends BaseEntity {
-
-    @SequenceGenerator(name = "base_seq", sequenceName = "product_seq", allocationSize = 50)
 
     @Column(nullable = false, length = 200)
     private String name;
