@@ -1,0 +1,30 @@
+# Local dev profile - more relaxed settings for quick iteration
+# Activate with: -Dspring.profiles.active=local
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/crm_db
+    username: crm_user
+    password: crm_pass
+
+  jpa:
+    show-sql: true
+    hibernate:
+      # create-drop is convenient for dev but nukes your data on restart
+      # switch to validate once you have stable migrations
+      ddl-auto: none
+
+logging:
+  level:
+    com.crm: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.stat: DEBUG  # shows L2 cache hit/miss - handy for tuning
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.cache: TRACE
+
+# seed data on startup - creates two test tenants automatically
+app:
+  seed-on-startup: true
